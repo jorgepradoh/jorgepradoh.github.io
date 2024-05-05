@@ -22,6 +22,7 @@ st.title("Main Page")
 html(
     """
 <html>
+
 <head>
    <script src = "https://cdnjs.cloudflare.com/ajax/libs/tsparticles/1.18.11/tsparticles.min.js"> </script>
    <style>
@@ -114,7 +115,7 @@ cols[3].markdown(
     '<a href="www.linkedin.com/in/jorge-a-prado/"><img src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg" height="64" alt="LinkedIn URL">',
     unsafe_allow_html=True,
     )
-cols[1].markdown(
+cols[0].markdown(
     '<a href="https://github.com/jorgepradoh"><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" height="64" alt="GitHub URL">',
     unsafe_allow_html=True,
     )
@@ -142,7 +143,8 @@ programming = st.checkbox("👩‍💻 Programming Languages ")
 if programming:
     st.write(
         """
-            - **Python:** A.I. Focus: M.L. & D.L. for Computer Vision, LLMs for Natural Language Processing
+            - **Python:** A.I. Focus: M.L. & D.L. for Computer Vision, LLMs for Natural Language Processing.
+                    ► Pytorch, Tensorflow, Numpy, Pandas, Scikit-learn 
             - **TypeScript:** QA Automation with TestCafe & Selenium 
             - **Javascript:** Performance Testing with JMeter, K6, Postman
             - **C++:** Object Oriented Programing, Industrial Robot Control 
@@ -153,7 +155,7 @@ cloud = st.checkbox("☁️🖥️ Cloud-Related ")
 
 if cloud:
     st.write(
-        """
+        """        
             - **AWS:** 
                 - EC2
                 - Sagemaker
@@ -173,6 +175,18 @@ if languages:
          - **English:** ***C1 Advanced***
          - **French:** ***B1 Intermediate***
          - **German:** ***A1 Beginner***
+        """
+             )
+    
+other = st.checkbox("🤹 Other Skills")
+
+if other:
+    st.write(
+        """
+        - **Computer Aided Design:** SolidWorks, Fusion 360
+        - **Electronics:** PLCs, Industrial Robot Manipulation, Electronic Circuit Design
+        - **Matlab & Wolfram Mathematica:** For scientific computing, numerical analysis, numerical simulations
+        - **3D Printing**
         """
              )
 
@@ -227,7 +241,7 @@ st.write("🎓", "**National Institute for Astrophysics, Optics and Electronics*
 st.write("***August 2021 - August 2023***")
 st.write(
     """
-- ► MSc. in Science and Technology of Space | Specialization in Earth Observation 
+- ► ***MSc. in Science and Technology of Space | Specialization in Earth Observation*** 
 - Performed research on vision transformers for monocular visual odometry applied to autonomous rover navigation in martian environments.
 """
 )
@@ -237,7 +251,7 @@ st.write("🎓", "**La Salle Laguna University**")
 st.write("***August 2016 - January 2021***")
 st.write(
     """
-- ► Bachelors in Mechatronics Engineering | Specialization in Automation & Embedded Systems
+- ► ***Bachelors in Mechatronics Engineering | Specialization in Automation & Embedded Systems***
 - Focused on Industrial Robotics for manufacturing automation and Embedded Systems for instrumentation  
 """
 )
