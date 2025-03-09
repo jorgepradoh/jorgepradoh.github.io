@@ -3,28 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <title>My Portfolio</title>
-  <!-- Link to your CSS -->
+  <!-- Import Google Fonts: Oswald for headings -->
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <!-- Link to CSS -->
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="manifest" href="./assets/favicon_io/site.webmanifest">
+  <link rel="shortcut icon" href="./assets/favicon_io/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon_io/favicon-16x16.png">
 </head>
 <body>
   <!-- Intro Section -->
   <header class="intro">
-    <h1>My Name</h1>
-    <p>A brief introduction about me. I build modern web applications using open technologies.</p>
+    <h1 class="hover-underline">Jorge Prado</h1>
+    <br />
+    <p class="hover-underline">
+      <b>Mechatronics Engineer</b> and <b>MSc. in Science and Technology of Space</b> with a strong background in <b>AI, computer vision, and cloud technologies.</b>
+      <br />I am passionate about <b> AI, cloud engineering, and system design.</b> My side projects focus on <b>LLM applications, autonomous systems, and scalable backend architectures.</b>
+      <br />I enjoy tackling complex challenges, adapting to new technologies, and delivering <b>innovative solutions </b>that bridge <b>AI and real-world applications.</b>
+      <br />
+    </p>
   </header>
 
-  <!-- Carousel Wrapper with Navigation Buttons -->
-  <section class="carousel-wrapper">
+  <!-- Carousel Section -->
+  <section class="carousel-wrapper" >
     <button id="prev-btn" class="carousel-btn">&#10094;</button>
     <div id="carousel" class="carousel">
-      <!-- Slides will be injected here by JavaScript -->
+      <!-- Carousel slides will be injected here by JavaScript -->
     </div>
     <button id="next-btn" class="carousel-btn">&#10095;</button>
   </section>
 
+  <!-- Starfield Canvas for outer space background -->
+  <canvas id="starfieldCanvas"></canvas>
+  <!-- Footer -->
+  <footer class="footer">
+    <p>
+      <a href="https://www.linkedin.com/in/jorge-a-prado/" target="_blank">LinkedIn</a>
+      <a href="https://github.com/jorgepradoh" target="_blank">GitHub</a>
+      <a href="mailto:jorge.prado@live.com.mx">Email</a>
+    </p>
+  </footer>
+
   <!-- Include marked.js for Markdown parsing -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <!-- Include your carousel script -->
+  <!-- Include Mermaid.js (if diagrams are used) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: false });
+  </script>
+  <!-- Include Starfield script -->
+  <script src="js/starfield.js"></script>
+  <!-- Include Carousel script -->
   <script src="js/carousel.js"></script>
 </body>
 </html>
