@@ -1,23 +1,76 @@
-/* Reset and dark theme styling */
+/* Global Styles and Dark Theme */
 body {
   margin: 0;
-  background-color: #1f1f1f;
+  /* Remove opaque background so the canvas shows */
+  background: transparent;
   color: #ddd;
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Starfield Canvas styling */
+#starfieldCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+}
+
+/* Intro Section */
 .intro {
   text-align: center;
   padding: 2rem;
+}
+.intro h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Underline Hover Effect on Name (using white) */
+.hover-underline {
+  position: relative;
+  display: inline-block;
+  color: #ffffff;
+}
+.hover-underline::after,
+.hover-underline::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  transform: scaleX(0);
+  transition: transform 0.4s ease-out;
+}
+.hover-underline::after {
+  bottom: -5px;
+  left: 0;
+  transform-origin: right;
+}
+.hover-underline::before {
+  top: -5px;
+  left: 0;
+  transform-origin: left;
+}
+.hover-underline:hover::after,
+.hover-underline:hover::before {
+  transform: scaleX(1);
 }
 
 /* Carousel Wrapper */
 .carousel-wrapper {
   position: relative;
-  max-width: 1000px;
+  width: 100vw;
+  height: 70vh;
   margin: 0 auto;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 /* Carousel Container */
@@ -27,21 +80,38 @@ body {
   scroll-behavior: smooth;
   gap: 1rem;
   width: 100%;
+  height: 100%;
+  position: relative;
 }
 
-/* Each Slide */
+/* Carousel Slide */
 .carousel-slide {
   flex: 0 0 100%;
   scroll-snap-align: center;
-  background-color: #2a2a2a;
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 16px;
   box-sizing: border-box;
+  height: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  position: relative;
 }
 
-/* Slide content: image and description */
+/* Index Number Overlay on Slide */
+.carousel-index {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Slide Content */
 .carousel-slide img {
   width: 100%;
+  height: auto;
   border-radius: 4px;
 }
 .project-description {
@@ -64,7 +134,24 @@ body {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* Hide scrollbar (optional) */
+/* Hide Scrollbar */
 .carousel::-webkit-scrollbar {
   display: none;
+}
+
+/* Footer Styling */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #111;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+.footer a {
+  color: #aaa;
+  margin: 0 0.5rem;
+  text-decoration: none;
+}
+.footer a:hover {
+  color: #fff;
 }

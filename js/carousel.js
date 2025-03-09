@@ -1,4 +1,4 @@
-// Array of project objects (add or modify as needed)
+// Array of project objects (update or add projects as needed)
 const projects = [
   {
     image: 'images/project1.png',
@@ -7,6 +7,12 @@ const projects = [
 A brief description of project one written in **markdown**.
 - Feature A
 - Feature B
+
+\`\`\`mermaid
+graph LR
+  A[Start] --> B[Process]
+  B --> C[Finish]
+\`\`\`
     `
   },
   {
@@ -16,6 +22,14 @@ A brief description of project one written in **markdown**.
 Details about project two.
 - Innovative design
 - Cutting-edge technology
+
+\`\`\`mermaid
+sequenceDiagram
+  participant Alice
+  participant Bob
+  Alice->>Bob: Hello Bob, how are you?
+  Bob-->>Alice: I am good thanks!
+\`\`\`
     `
   },
   {
@@ -33,26 +47,29 @@ Overview of project three.
 function renderCarousel() {
   const carousel = document.getElementById('carousel');
   projects.forEach((project, index) => {
-    // Create a container for each slide
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
     
-    // Use marked.js to convert markdown to HTML
+    // Add index overlay and convert markdown to HTML using marked.js
     slide.innerHTML = `
-      <img src="${project.image}" alt="Screenshot for project ${index + 1}">
+      <img src="${project.image}" alt="Project ${index + 1}">
       <div class="project-description">${marked.parse(project.markdown)}</div>
+      <div class="carousel-index">${index + 1} / ${projects.length}</div>
     `;
     carousel.appendChild(slide);
   });
+
+  // After rendering, initialize Mermaid diagrams (if any)
+  mermaid.init(undefined, document.querySelectorAll('.project-description pre code.language-mermaid, .project-description .mermaid'));
 }
 
-// Navigation logic: scroll by one slide width
+// Navigation logic: scroll one slide at a time
 function setupNavigation() {
   const carousel = document.getElementById('carousel');
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
 
-  // Get the width of one slide (assumes all slides are same width)
+  // Assumes all slides have the same width
   const slideWidth = carousel.querySelector('.carousel-slide').clientWidth;
 
   prevBtn.addEventListener('click', () => {
@@ -64,7 +81,7 @@ function setupNavigation() {
   });
 }
 
-// Initialize carousel on DOM load
+// Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
   renderCarousel();
   setupNavigation();
