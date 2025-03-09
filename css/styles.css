@@ -1,0 +1,70 @@
+/* Reset and dark theme styling */
+body {
+  margin: 0;
+  background-color: #1f1f1f;
+  color: #ddd;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.intro {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Carousel Wrapper */
+.carousel-wrapper {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Carousel Container */
+.carousel {
+  display: flex;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Each Slide */
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Slide content: image and description */
+.carousel-slide img {
+  width: 100%;
+  border-radius: 4px;
+}
+.project-description {
+  padding-top: 1rem;
+}
+
+/* Navigation Buttons */
+.carousel-btn {
+  background-color: rgba(0, 0, 0, 0.6);
+  border: none;
+  color: #fff;
+  padding: 1rem;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+.carousel-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Hide scrollbar (optional) */
+.carousel::-webkit-scrollbar {
+  display: none;
+}
