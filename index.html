@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Portfolio</title>
+  <!-- Link to your CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Intro Section -->
+  <header class="intro">
+    <h1>My Name</h1>
+    <p>A brief introduction about me. I build modern web applications using open technologies.</p>
+  </header>
+
+  <!-- Carousel Wrapper with Navigation Buttons -->
+  <section class="carousel-wrapper">
+    <button id="prev-btn" class="carousel-btn">&#10094;</button>
+    <div id="carousel" class="carousel">
+      <!-- Slides will be injected here by JavaScript -->
+    </div>
+    <button id="next-btn" class="carousel-btn">&#10095;</button>
+  </section>
+
+  <!-- Include marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Include your carousel script -->
+  <script src="js/carousel.js"></script>
+</body>
+</html>
