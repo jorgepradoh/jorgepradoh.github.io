@@ -1,0 +1,88 @@
+{{ define "main" }}
+<div class="list-page">
+    <h1>{{ .Title }}</h1>
+    {{ if .Content }}<div class="content">{{ .Content }}</div>{{ end }}
+    
+    <div class="posts-list">
+        {{ range .Paginator.Pages }}
+        <article class="post-item card">
+            <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+            <div class="meta">
+                <span class="date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                {{ if .Params.readingTime }}<span class="reading-time">{{ .Params.readingTime }} min read</span>{{ end }}
+            </div>
+            <p class="summary">{{ .Summary }}</p>
+            <div class="tags">
+                {{ range .Params.tags }}
+                <a href="{{ .Site.BaseURL }}tags/{{ . | urlize }}/" class="tag">{{ . }}</a>
+                {{ end }}
+            </div>
+        </article>
+        {{ end }}
+    </div>
+</div>
+
+<style>
+.list-page h1 {
+    margin-bottom: 2rem;
+}
+
+.posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.post-item {
+    padding: 2rem;
+}
+
+.post-item h2 {
+    margin-top: 0;
+}
+
+.post-item h2 a {
+    color: var(--primary);
+    transition: color 0.2s;
+}
+
+.post-item h2 a:hover {
+    color: var(--accent2);
+}
+
+.meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--secondary);
+    margin-bottom: 1rem;
+}
+
+.summary {
+    color: var(--secondary);
+    margin-bottom: 1rem;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    display: inline-block;
+    background: var(--secondary);
+    color: var(--bg);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.tag:hover {
+    background: var(--accent1);
+    color: var(--bg);
+    text-decoration: none;
+}
+</style>
+{{ end }}
