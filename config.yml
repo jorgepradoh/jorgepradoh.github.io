@@ -1,0 +1,85 @@
+baseURL: https://jorgepradoh.github.io
+languageCode: en-us
+title: Jorge Prado - AI Engineer
+theme: PaperMod
+defaultContentLanguage: en
+
+outputs:
+  home:
+    - HTML
+    - JSON
+
+params:
+  author: Jorge Prado
+  description: AI & Robotics Engineer. Portfolio and technical blog.
+  keywords: AI, Robotics, Machine Learning, Data Engineering
+  socialLinks:
+    - name: GitHub
+      url: https://github.com/jorgepradoh
+    - name: LinkedIn
+      url: https://linkedin.com/in/jorge-a-prado
+  
+  theme:
+    colorScheme: auto
+    darkMode:
+      background: "#1A1535"
+      primary: "#EDEDED"
+      secondary: "#AAA"
+      accent1: "#FFB300"
+      accent2: "#00B6FF"
+    lightMode:
+      background: "#F4EED5"
+      primary: "#1E1E1E"
+      secondary: "#555"
+      accent1: "#FFB300"
+      accent2: "#00B6FF"
+  
+  fonts:
+    body: "DM Mono"
+    headings: "Inter"
+  
+  analytics:
+    goatCounter: "jorgepradoh"
+
+taxonomies:
+  category: categories
+  tag: tags
+
+languages:
+  en:
+    languageName: English
+    weight: 1
+    contentDir: content/en
+    outputs:
+      home:
+        - HTML
+    menu:
+      main:
+        - name: Blog
+          url: /blog
+          weight: 1
+        - name: Projects
+          url: /projects
+          weight: 2
+        - name: About
+          url: /about
+          weight: 3
+  
+  es:
+    languageName: Español
+    weight: 2
+    contentDir: content/es
+    outputs:
+      home:
+        - HTML
+    menu:
+      main:
+        - name: Blog
+          url: /es/blog
+          weight: 1
+        - name: Proyectos
+          url: /es/projects
+          weight: 2
+        - name: Acerca de
+          url: /es/about
+          weight: 3

@@ -1,0 +1,48 @@
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <p>&copy; {{ now.Year }} {{ .Site.Params.author }}. All rights reserved.</p>
+            <div class="social-links">
+                {{ range .Site.Params.socialLinks }}
+                <a href="{{ .url }}" target="_blank" rel="noopener noreferrer" title="{{ .name }}">{{ .name }}</a>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</footer>
+<style>
+.footer {
+    background: var(--bg);
+    border-top: 1px solid var(--secondary);
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.footer-content p {
+    font-size: 0.85rem;
+    color: var(--secondary);
+}
+
+.social-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.social-links a {
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.social-links a:hover {
+    text-shadow: 0 0 8px var(--accent1);
+}
+</style>
