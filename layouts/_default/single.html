@@ -9,7 +9,7 @@
         {{ if .Params.tags }}
         <div class="tags">
             {{ range .Params.tags }}
-            <a href="{{ .Site.BaseURL }}tags/{{ . | urlize }}/">{{ . }}</a>
+            <a href="/tags/{{ . | urlize }}/">{{ . }}</a>
             {{ end }}
         </div>
         {{ end }}
