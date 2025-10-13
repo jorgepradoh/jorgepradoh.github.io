@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>LLMs on Jorge Prado - AI Engineer</title><link>https://jorgepradoh.github.io/tags/llms/</link><description>Recent content in LLMs on Jorge Prado - AI Engineer</description><generator>Hugo -- 0.151.0</generator><language>en</language><lastBuildDate>Thu, 10 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgepradoh.github.io/tags/llms/index.xml" rel="self" type="application/rss+xml"/><item><title>Deploying LLMs Securely in VPCs</title><link>https://jorgepradoh.github.io/blogs/deploying-llms-vpcs/</link><pubDate>Thu, 10 Oct 2024 00:00:00 +0000</pubDate><guid>https://jorgepradoh.github.io/blogs/deploying-llms-vpcs/</guid><description>&lt;p&gt;Securing large language models in enterprise VPCs requires careful consideration of network isolation, encryption, and access controls. This post covers best practices for deploying LLMs using AWS PrivateLink, VPC endpoints, and IAM policies to maintain security without sacrificing performance.&lt;/p&gt;
+&lt;p&gt;Key topics:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;VPC architecture patterns for LLM inference&lt;/li&gt;
+&lt;li&gt;Network encryption and TLS configuration&lt;/li&gt;
+&lt;li&gt;IAM role strategies for service-to-service authentication&lt;/li&gt;
+&lt;li&gt;Monitoring and logging in isolated environments&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>AI Voice Agent Framework</title><link>https://jorgepradoh.github.io/projects/project-1-voice-agent/</link><pubDate>Tue, 01 Oct 2024 00:00:00 +0000</pubDate><guid>https://jorgepradoh.github.io/projects/project-1-voice-agent/</guid><description>End-to-end framework for building conversational AI agents with voice I/O, integrating speech-to-text, LLM reasoning, and text-to-speech synthesis.</description></item><item><title>Building AI Agents with Model Context Protocol</title><link>https://jorgepradoh.github.io/blogs/building-ai-agents-mcp/</link><pubDate>Wed, 25 Sep 2024 00:00:00 +0000</pubDate><guid>https://jorgepradoh.github.io/blogs/building-ai-agents-mcp/</guid><description>&lt;p&gt;The Model Context Protocol (MCP) enables AI agents to dynamically access tools and data sources while maintaining stateless, scalable architectures. Learn how to design MCP-compatible agents and integrate them with popular LLM frameworks.&lt;/p&gt;
+&lt;p&gt;This article explores:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MCP specification and protocol design&lt;/li&gt;
+&lt;li&gt;Implementing custom MCP servers&lt;/li&gt;
+&lt;li&gt;Integration with Claude and other LLMs&lt;/li&gt;
+&lt;li&gt;Production deployment considerations&lt;/li&gt;
+&lt;/ul&gt;</description></item></channel></rss>
