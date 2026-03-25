@@ -1,0 +1,269 @@
+---
+import Base from './Base.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  readingTime: number;
+}
+
+const { post, readingTime } = Astro.props;
+const { title, description, date, updated, tags } = post.data;
+
+const fmt = (d: Date) => d.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric'
+});
+---
+
+<Base title={`${title} — Jorge Prado`} description={description}>
+  <div class="site-nav">
+    <a href="/" class="logo"><span class="blue">~/</span>jorge-prado</a>
+    <div class="nav-links">
+      <a href="/#experience">experience</a>
+      <a href="/#projects">projects</a>
+      <a href="/#lab" class="green">lab</a>
+      <a href="/blog" class="active">blog</a>
+      <a href="/#contact">contact</a>
+    </div>
+  </div>
+
+  <main class="post-main">
+    <div class="post-container">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="/blog">← all posts</a>
+      </nav>
+
+      <!-- Header -->
+      <header class="post-header">
+        <div class="post-meta-top">
+          <time datetime={date.toISOString()}>{fmt(date)}</time>
+          <span class="sep">·</span>
+          <span>{readingTime} min read</span>
+          {updated && <>
+            <span class="sep">·</span>
+            <span class="updated">updated {fmt(updated)}</span>
+          </>}
+        </div>
+        <h1>{title}</h1>
+        <p class="post-desc">{description}</p>
+        <div class="tags">
+          {tags.map(t => <span class="tag">{t}</span>)}
+        </div>
+      </header>
+
+      <div class="divider" />
+
+      <!-- Post body — MDX renders here -->
+      <article class="prose">
+        <slot />
+      </article>
+
+      <div class="divider" style="margin-top: 4rem;" />
+
+      <!-- Footer nav -->
+      <footer class="post-footer">
+        <a href="/blog" class="back-link">← back to all posts</a>
+        <p class="footer-note">
+          Found a mistake or want to discuss? 
+          <a href="https://github.com/jorgepradoh" target="_blank" rel="noopener">GitHub</a> · 
+          <a href="https://linkedin.com/in/jorge-a-prado" target="_blank" rel="noopener">LinkedIn</a>
+        </p>
+      </footer>
+
+    </div>
+  </main>
+</Base>
+
+<style>
+  /* ── NAV ── */
+  .site-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center;
+    padding: 0 clamp(1rem, 4vw, 3rem); height: 56px;
+    background: rgba(13, 11, 26, 0.94);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    gap: 2rem;
+  }
+  .logo {
+    font-family: var(--mono); font-size: 15px; font-weight: 500;
+    color: var(--cream); text-decoration: none; white-space: nowrap;
+  }
+  .logo:hover { text-decoration: none; }
+  .blue { color: var(--blue); }
+  .nav-links {
+    display: flex; gap: clamp(12px, 2vw, 24px);
+    margin-left: auto; align-items: center;
+  }
+  .nav-links a {
+    font-family: var(--mono); font-size: 13px; color: var(--mutedL);
+    text-decoration: none; padding: 4px 0;
+    border-bottom: 1px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--amber); border-bottom-color: var(--amber);
+  }
+  .nav-links a.green { color: var(--green); }
+  .nav-links a.green:hover { border-bottom-color: var(--green); }
+
+  /* ── LAYOUT ── */
+  .post-main {
+    padding-top: 56px; /* nav height */
+    min-height: 100vh;
+    display: flex; justify-content: center;
+  }
+  .post-container {
+    width: 100%;
+    max-width: 720px;
+    padding: 3.5rem clamp(1.25rem, 5vw, 2rem) 6rem;
+  }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb a {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--muted); letter-spacing: .05em;
+    text-decoration: none; transition: color .2s;
+  }
+  .breadcrumb a:hover { color: var(--blue); text-decoration: none; }
+
+  /* ── HEADER ── */
+  .post-header { margin-top: 2rem; }
+  .post-meta-top {
+    font-family: var(--mono); font-size: 12px;
+    color: var(--muted); letter-spacing: .05em;
+    display: flex; gap: .5rem; align-items: center;
+    flex-wrap: wrap; margin-bottom: 1rem;
+  }
+  .sep { color: var(--border); }
+  .updated { color: var(--muted); font-style: italic; }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700; color: var(--cream);
+    line-height: 1.2; letter-spacing: -.02em;
+    margin-bottom: .75rem;
+  }
+  .post-desc {
+    font-size: 1.05rem; color: var(--mutedL);
+    line-height: 1.75; margin-bottom: 1.25rem;
+  }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--blue); background: rgba(0, 182, 255, 0.08);
+    border: 1px solid rgba(0, 182, 255, 0.22);
+    padding: 2px 9px; border-radius: 3px;
+  }
+
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 2rem 0;
+  }
+
+  /* ── PROSE STYLES ── */
+  .prose {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: #d8d2be;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.4rem; font-weight: 600;
+    color: var(--cream); margin: 2.5rem 0 .75rem;
+    letter-spacing: -.015em;
+    padding-bottom: .4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .prose :global(h3) {
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--cream); margin: 2rem 0 .5rem;
+  }
+  .prose :global(h4) {
+    font-family: var(--mono); font-size: .875rem;
+    color: var(--blue); letter-spacing: .1em;
+    text-transform: uppercase; margin: 1.75rem 0 .5rem;
+  }
+
+  .prose :global(p) { margin-bottom: 1.2rem; }
+  .prose :global(p:last-child) { margin-bottom: 0; }
+
+  .prose :global(a) {
+    color: var(--blue); text-decoration: none;
+    border-bottom: 1px solid rgba(0, 182, 255, 0.35);
+    transition: border-color .2s;
+  }
+  .prose :global(a:hover) {
+    border-bottom-color: var(--blue);
+    text-decoration: none;
+  }
+
+  .prose :global(ul), .prose :global(ol) {
+    padding-left: 1.5rem; margin-bottom: 1.2rem;
+    display: flex; flex-direction: column; gap: .4rem;
+  }
+  .prose :global(li) { color: #d8d2be; }
+
+  .prose :global(blockquote) {
+    border-left: 2px solid var(--amber);
+    padding: .75rem 1.25rem;
+    margin: 1.5rem 0;
+    background: rgba(255, 179, 0, 0.05);
+    border-radius: 0 4px 4px 0;
+  }
+  .prose :global(blockquote p) {
+    color: var(--mutedL); font-style: italic;
+    margin: 0;
+  }
+
+  .prose :global(table) {
+    width: 100%; border-collapse: collapse;
+    font-family: var(--mono); font-size: 13px;
+    margin: 1.75rem 0;
+  }
+  .prose :global(th) {
+    text-align: left; padding: 8px 14px;
+    color: var(--cream); font-weight: 500;
+    border-bottom: 2px solid var(--border);
+  }
+  .prose :global(td) {
+    padding: 7px 14px; color: var(--mutedL);
+    border-bottom: 1px solid var(--border);
+  }
+  .prose :global(tr:last-child td) { border-bottom: none; }
+  .prose :global(tr:nth-child(even)) { background: rgba(255,255,255,.02); }
+
+  .prose :global(img) {
+    max-width: 100%; border-radius: 6px;
+    border: 1px solid var(--border);
+    margin: 1.75rem 0;
+  }
+  .prose :global(hr) {
+    border: none; height: 1px;
+    background: var(--border); margin: 2.5rem 0;
+  }
+
+  /* ── FOOTER ── */
+  .post-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .back-link {
+    font-family: var(--mono); font-size: 13px;
+    color: var(--muted); text-decoration: none;
+    transition: color .2s;
+  }
+  .back-link:hover { color: var(--blue); text-decoration: none; }
+  .footer-note {
+    font-size: 13px; color: var(--muted);
+  }
+  .footer-note a { color: var(--mutedL); border-bottom: 1px solid var(--border); }
+  .footer-note a:hover { color: var(--blue); border-bottom-color: var(--blue); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; } /* mobile: use portfolio's hamburger nav instead */
+    h1 { font-size: 1.5rem; }
+  }
+</style>

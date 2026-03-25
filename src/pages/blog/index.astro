@@ -1,0 +1,242 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sorted = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Collect all unique tags
+const allTags = [...new Set(sorted.flatMap(p => p.data.tags))].sort();
+
+const fmt = (d: Date) => d.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'short', day: 'numeric'
+});
+
+// Rough reading time from content — ~200 wpm
+function readingTime(body: string) {
+  return Math.max(1, Math.round(body.split(/\s+/).length / 200));
+}
+---
+
+<Base title="Blog — Jorge Prado" description="Writing on AI systems, space robotics, software architecture, and computer vision research.">
+
+  <div class="site-nav">
+    <a href="/" class="logo"><span class="blue">~/</span>jorge-prado</a>
+    <div class="nav-links">
+      <a href="/#experience">experience</a>
+      <a href="/#projects">projects</a>
+      <a href="/#lab" class="green">lab</a>
+      <a href="/blog" class="active">blog</a>
+      <a href="/#contact">contact</a>
+    </div>
+  </div>
+
+  <main class="blog-main">
+    <div class="blog-container">
+
+      <header class="blog-header">
+        <p class="label">./blog</p>
+        <h1>Writing</h1>
+        <p class="subhead">
+          Notes on AI systems, software architecture, space robotics, and computer vision research.
+          Experiments, paper thoughts, and decisions worth documenting.
+        </p>
+      </header>
+
+      <!-- Tag filter (JS island) -->
+      <div class="tag-filter" id="tag-filter">
+        <button class="tag-btn active" data-tag="">all</button>
+        {allTags.map(t => (
+          <button class="tag-btn" data-tag={t}>{t}</button>
+        ))}
+      </div>
+
+      <!-- Post list -->
+      <ul class="post-list" id="post-list">
+        {sorted.map(post => (
+          <li class="post-item" data-tags={JSON.stringify(post.data.tags)}>
+            <a href={`/blog/${post.slug}`} class="post-link">
+              <div class="post-row">
+                <div class="post-info">
+                  {post.data.featured && <span class="featured-badge">featured</span>}
+                  <h2 class="post-title">{post.data.title}</h2>
+                  <p class="post-desc">{post.data.description}</p>
+                  <div class="post-meta">
+                    <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+                    <span class="dot">·</span>
+                    <span>{post.data.readingTime ?? readingTime(post.body)} min read</span>
+                  </div>
+                  <div class="post-tags">
+                    {post.data.tags.map(t => <span class="tag">{t}</span>)}
+                  </div>
+                </div>
+                <span class="arrow">→</span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {sorted.length === 0 && (
+        <div class="empty">
+          <p>No posts yet — first one incoming.</p>
+        </div>
+      )}
+
+    </div>
+  </main>
+</Base>
+
+<script>
+  // Client-side tag filtering — no framework needed
+  const btns = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
+  const items = document.querySelectorAll<HTMLLIElement>('.post-item');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tag = btn.dataset.tag ?? '';
+      items.forEach(item => {
+        const tags: string[] = JSON.parse(item.dataset.tags ?? '[]');
+        item.style.display = (!tag || tags.includes(tag)) ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+<style>
+  /* ── NAV (same as BlogPost) ── */
+  .site-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center;
+    padding: 0 clamp(1rem, 4vw, 3rem); height: 56px;
+    background: rgba(13, 11, 26, 0.94);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px); gap: 2rem;
+  }
+  .logo {
+    font-family: var(--mono); font-size: 15px; font-weight: 500;
+    color: var(--cream); text-decoration: none; white-space: nowrap;
+  }
+  .logo:hover { text-decoration: none; }
+  .blue { color: var(--blue); }
+  .nav-links {
+    display: flex; gap: clamp(12px, 2vw, 24px);
+    margin-left: auto; align-items: center;
+  }
+  .nav-links a {
+    font-family: var(--mono); font-size: 13px;
+    color: var(--mutedL); text-decoration: none; padding: 4px 0;
+    border-bottom: 1px solid transparent; transition: color .2s, border-color .2s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--amber); border-bottom-color: var(--amber); text-decoration: none;
+  }
+  .nav-links a.green { color: var(--green); }
+
+  /* ── LAYOUT ── */
+  .blog-main { padding-top: 56px; min-height: 100vh; display: flex; justify-content: center; }
+  .blog-container {
+    width: 100%; max-width: 760px;
+    padding: 3.5rem clamp(1.25rem, 5vw, 2rem) 6rem;
+  }
+
+  /* ── HEADER ── */
+  .label {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--blue); letter-spacing: .2em;
+    text-transform: uppercase; margin-bottom: .75rem;
+  }
+  h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700; color: var(--cream);
+    letter-spacing: -.02em; margin-bottom: .75rem;
+  }
+  .subhead {
+    color: var(--mutedL); font-size: 15px;
+    line-height: 1.75; max-width: 520px; margin-bottom: 2.5rem;
+  }
+
+  /* ── TAG FILTER ── */
+  .tag-filter {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2.5rem;
+  }
+  .tag-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono); font-size: 12px;
+    cursor: pointer; padding: 4px 12px; border-radius: 3px;
+    transition: all .15s;
+  }
+  .tag-btn:hover { border-color: var(--mutedL); color: var(--mutedL); }
+  .tag-btn.active {
+    border-color: var(--blue); color: var(--blue);
+    background: rgba(0, 182, 255, 0.08);
+  }
+
+  /* ── POST LIST ── */
+  .post-list { list-style: none; display: flex; flex-direction: column; }
+  .post-item { border-top: 1px solid var(--border); }
+  .post-item:last-child { border-bottom: 1px solid var(--border); }
+
+  .post-link {
+    display: block; text-decoration: none;
+    padding: 1.75rem 0;
+    transition: background .15s;
+  }
+  .post-link:hover { text-decoration: none; }
+  .post-link:hover .post-title { color: var(--amber); }
+  .post-link:hover .arrow { color: var(--amber); transform: translateX(4px); }
+
+  .post-row {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 1.5rem;
+  }
+  .post-info { flex: 1; }
+
+  .featured-badge {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    color: var(--amber); background: rgba(255, 179, 0, 0.1);
+    border: 1px solid rgba(255, 179, 0, 0.3);
+    padding: 1px 8px; border-radius: 3px;
+    letter-spacing: .08em; text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+
+  .post-title {
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--cream); margin-bottom: .4rem;
+    transition: color .15s; line-height: 1.35;
+  }
+  .post-desc {
+    font-size: 13.5px; color: var(--mutedL);
+    line-height: 1.65; margin-bottom: .65rem;
+  }
+  .post-meta {
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    display: flex; gap: .5rem; align-items: center;
+    margin-bottom: .6rem;
+  }
+  .dot { color: var(--border); }
+  .post-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--blue); background: rgba(0, 182, 255, 0.07);
+    border: 1px solid rgba(0, 182, 255, 0.2);
+    padding: 2px 8px; border-radius: 3px;
+  }
+  .arrow {
+    color: var(--muted); font-size: 18px; align-self: center;
+    flex-shrink: 0; transition: color .15s, transform .15s;
+  }
+
+  /* ── EMPTY ── */
+  .empty { padding: 3rem 0; text-align: center; color: var(--muted); font-family: var(--mono); }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .arrow { display: none; }
+  }
+</style>

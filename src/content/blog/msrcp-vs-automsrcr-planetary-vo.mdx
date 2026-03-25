@@ -1,0 +1,71 @@
+---
+title: "Why MSRCP beat autoMSRCR for planetary visual odometry"
+description: "The preprocessing decision that improved ATE by 10.6% on MADMAX — what I tried, what failed, and what the results actually mean."
+date: 2024-09-01
+tags: ["computer-vision", "space-robotics", "visual-odometry", "thesis"]
+featured: true
+---
+
+import ExperimentTable from '../../components/ExperimentTable.jsx';
+import Callout from '../../components/Callout.jsx';
+
+During my MSc thesis at INAOE, one of the most consequential decisions I made was choosing between two variants of multi-scale Retinex for image preprocessing: **autoMSRCR** (automatic multi-scale Retinex with color restoration) and **MSRCP** (multi-scale Retinex with chromaticity preservation). The difference between them turned a 6% degradation into a 10.6% improvement. This is the story of why.
+
+## The problem with planetary imagery
+
+The MADMAX dataset — 36 navigation sequences across 8 Mars-analog sites in the Moroccan Sahara — looks deceptively clean in thumbnails. In practice the AlliedVision Mako G-319 camera captures what I'd describe as "overexposed dust": the terrain is simultaneously too bright in the sand flats and too dark in the rock shadows. The contrast ratio is brutal for any learned model expecting something closer to ImageNet statistics.
+
+TSformer-VO was pre-trained on indoor sequences (ScanNet, TUM-RGBD). The domain gap wasn't just environmental — it was photometric. Naive transfer learning on the raw MADMAX frames worked, but the scale estimates drifted badly in the flat sandy sections where texture is nearly absent.
+
+<Callout type="note">
+  Visual odometry on flat, homogeneous terrain is hard for any method. The tracker has almost nothing to hold onto — no depth discontinuities, no distinctive landmarks. Preprocessing that enhances subtle surface gradients directly helps the attention mechanism find structure where there isn't much.
+</Callout>
+
+## What Retinex actually does here
+
+The Retinex theory (Land, 1971) models the observed image as the product of illumination and reflectance. Multi-scale Retinex separates these by subtracting a Gaussian-blurred version of the log-luminance at several scales, leaving you with a more "intrinsic" image that's less sensitive to lighting conditions.
+
+The two variants diverge in how they handle color:
+
+- **autoMSRCR** applies a nonlinear gain/offset per channel to map the output to [0, 255]. The "auto" in the name refers to this automatic gain normalization. It works well for natural photography. On terrain imagery, it amplifies noise in the over-exposed regions and introduces color shifts that don't correspond to any real surface property.
+
+- **MSRCP** skips the per-channel normalization and instead preserves the chromaticity (hue and saturation) of the original while adjusting only luminance. This is the key: the color ratios stay physically meaningful. The model can still distinguish reddish sand from darker basalt without being confused by normalization artifacts.
+
+<Callout type="insight">
+  The failure mode of autoMSRCR on MADMAX was subtle — it didn't crash or produce obviously wrong outputs. The ATE was slightly *worse* than vanilla input. Only after plotting the trajectories per-sequence did the pattern become clear: the degradation was concentrated in the sequences with the most direct sunlight, exactly where the normalization gain was doing the most aggressive stretching.
+</Callout>
+
+## The results
+
+<ExperimentTable
+  client:load
+  caption="Transfer learning results — MADMAX dataset"
+  metric="ATE: lower is better"
+  highlight="MSRCP"
+  columns={["Preprocessing", "ATE avg.", "RPE avg.", "vs. baseline"]}
+  rows={[
+    ["Original (none)",  "185.37", "0.1932", "—"],
+    ["autoMSRCR",        "196.29", "0.1949", "+5.9% ↑"],
+    ["MSRCP ★",         "165.62", "0.1912", "−10.6% ↓"],
+  ]}
+/>
+
+The RPE (relative pose error) tells a slightly different story — all three are within 0.004 of each other, which matters less than ATE for long-sequence navigation. The ATE is the cumulative drift measure, and for a rover traversing hundreds of meters between waypoints, that 20-meter improvement in absolute trajectory accuracy is operationally significant.
+
+For comparison, DSO achieves an RPE of ~0.19 and ORB-SLAM3 ~0.20 on comparable sequences. We're competitive. ORB-SLAM3 failed entirely on 4 of the 36 sequences due to tracking loss in the textureless sandy sections — TSformer-VO + MSRCP completed all 36.
+
+## What I'd do differently
+
+The fine-tuning was done for 400 epochs on a Tesla V100 with the MADMAX training split. In retrospect:
+
+1. **I'd run ablations on the Retinex scale parameters.** I used the standard σ = {15, 80, 250} from the original MSR paper. There's a plausible argument that planetary terrain at this scale-frequency distribution would benefit from tighter scales — less long-range illumination variation and more localized shadow correction.
+
+2. **I'd measure per-terrain-type.** The 8 sites in MADMAX have meaningfully different photometry: rocky plateau vs. sandy basin vs. mixed. The global ATE number hides potentially interesting variance across these conditions.
+
+3. **I'd test CLAHE** (Contrast Limited Adaptive Histogram Equalization) as a simpler baseline. My intuition is that MSRCP's luminance preservation is what matters and CLAHE might get 80% of the way there with a single hyperparameter.
+
+## Next steps on this thread
+
+I'm planning to write a follow-up on applying this to more recent ViT architectures — specifically whether DINOv2 features, which are already quite robust to photometric variation, reduce or eliminate the preprocessing benefit. The hypothesis is that MSRCP matters more for smaller models trained on narrow distributions than for large foundation models. Would be an interesting ablation to run.
+
+If you're working on planetary navigation or related preprocessing problems, I'd genuinely like to compare notes — reach out on [GitHub](https://github.com/jorgepradoh) or [LinkedIn](https://linkedin.com/in/jorge-a-prado).

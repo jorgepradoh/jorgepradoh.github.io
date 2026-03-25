@@ -1,0 +1,96 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  cover?: string;
+}
+const { title, description = "Jorge Prado — AI Engineer & Space Robotics Researcher", cover } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="canonical" href={canonicalURL} />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- OG -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  {cover && <meta property="og:image" content={new URL(cover, Astro.site)} />}
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style is:global>
+    :root {
+      --bg:      #0D0B1A;
+      --bg2:     #12101F;
+      --bg3:     #16142A;
+      --cream:   #F4EED5;
+      --amber:   #FFB300;
+      --blue:    #00B6FF;
+      --green:   #00FF9F;
+      --muted:   #6B6880;
+      --mutedL:  #9D9AB0;
+      --border:  rgba(255,255,255,0.07);
+      --mono:    'DM Mono', monospace;
+      --sans:    'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--sans);
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body { min-height: 100vh; }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 2px; }
+
+    /* Code blocks via Shiki */
+    pre.astro-code {
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13.5px;
+      line-height: 1.7;
+      border: 1px solid var(--border);
+      margin: 1.75rem 0;
+    }
+
+    /* Inline code */
+    :not(pre) > code {
+      font-family: var(--mono);
+      font-size: 0.875em;
+      background: rgba(0, 182, 255, 0.08);
+      border: 1px solid rgba(0, 182, 255, 0.18);
+      padding: 0.15em 0.45em;
+      border-radius: 3px;
+      color: var(--blue);
+    }
+
+    button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  </style>
+</head>
+<body>
+  <slot />
+</body>
+</html>
